@@ -30,8 +30,11 @@ Meeting Agenda templates (located in the `/docs` directory in this repo):
 ## Our Team
 
 
-- Ahamada Shamuran #1: [GitHub](https://github.com/Ahmad-nba) / [LinkedIn](www.linkedin.com/in/ahamada-mubiru-shamuran)
-- Teammate name #2: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
 
-   ...
+- Ahamada Shamuran #1: [GitHub](https://github.com/Ahmad-nba) / [LinkedIn](www.linkedin.com/in/ahamada-mubiru-shamuran)
+- Tibam Gisele: ](https://github.com/Gisele-1) / [LinkedIn]www.linkedin.com/in/tibam-gisele-684781129
+- Teammate name #2: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
 - Teammate name #n: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
+- Tibamwenda Anthony #5: [GitHub](https://github.com/AskTiba) / [LinkedIn](https://www.linkedin.com/in/tibamwenda-anthony-64144820b/)
+- Teammate name #n: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
+-  Teammate name #n: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
