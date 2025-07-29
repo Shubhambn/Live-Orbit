@@ -5,7 +5,7 @@ export const navConfig = {
   ],
   admin: [
     { label: "Home", path: "/" },
-    { label: "Patient Information", path: "/admin/patients" },
+    { label: "Patient Information", path: "/Dashboard/admin" },
     { label: "Status Update", path: "/admin/statusupdate" },
     { label: "Status Board", path: "/surgeon/statusboard" },
   ],
@@ -15,3 +15,5 @@ export const navConfig = {
     { label: "Status Update", path: "/surgeon/statusupdate" },
   ],
 };
+
+
