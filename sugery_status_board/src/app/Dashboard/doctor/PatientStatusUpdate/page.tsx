@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePatientStore } from '@/app/data/patientStore';
-import patients from '@/app/data/PatientsData.json';
+import { usePatientStore } from '@/Features/doctor/types/patientStore';
+import patients from '@/Features/doctor/data/PatientsData.json';
 
-import SearchPatient from '@/Features/doctor/dashboard/component/SearchPatient';
-import PatientInfo from '@/Features/doctor/dashboard/component/PatientInfo';
-import StatusUpdateForm from '@/Features/doctor/dashboard/component/StatusUpdate';
-import StatusWorkflow from '@/Features/doctor/dashboard/component/StatusWorkflo';
+
+import SearchPatient from '@/Features/doctor/component/SearchPatient';
+import PatientInfo from '@/Features/doctor/component/PatientInfo';
+import StatusUpdateForm from '@/Features/doctor/component/StatusUpdate';
+import StatusWorkflow from '@/Features/doctor/component/StatusWorkflo';
 
 export default function PatientStatusUpdatePage() {
   const { selectedPatient, setPatients } = usePatientStore();

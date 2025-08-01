@@ -1,6 +1,6 @@
 'use client';
 
-import { usePatientStore } from '@/app/data/patientStore';
+import { usePatientStore } from '@/Features/doctor/types/patientStore';
 
 const workflowSteps = [
   'Checked In',
@@ -23,17 +23,17 @@ export default function StatusUpdateForm() {
     updatePatientStatus(selectedPatient.id, newStatus);
 
     try {
-      const res = await fetch('/api/UpdatePatient', {
+      const res = await fetch('/api/doctor/UpdatePatient', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: selectedPatient.id, status: newStatus }),
       });
 
       if (!res.ok) throw new Error('Failed to update status');
-      console.log('✅ Status updated on server');
+      console.log('Status updated on server');
     } catch (error) {
-      console.error('Server update failed:', error);
-      alert('⚠ Could not save to server. Please try again later.');
+      console.log('Server update failed:', error);
+      alert('Could not save to server. Please try again later.');
     }
   };
 

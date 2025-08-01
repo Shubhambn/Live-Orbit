@@ -1,6 +1,6 @@
 'use client';
 
-import { usePatientStore } from '@/app/data/patientStore';
+import { usePatientStore } from '@/Features/doctor/types/patientStore';
 import { MapPin, Phone, Mail, User } from 'lucide-react';
 
 const statusStyles: Record<string, string> = {
@@ -60,7 +60,6 @@ export default function PatientDetailsCard() {
         </div>
       </div>
 
-      {/* Current Status Section */}
       <div className="mt-6 bg-gray-50 p-4 rounded-lg">
         <p className="text-sm text-gray-500 font-medium">Current Status</p>
 

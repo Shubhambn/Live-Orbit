@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { usePatientStore } from '@/app/data/patientStore';
+import { usePatientStore } from '@/Features/doctor/types/patientStore';
 
 export default function SearchPatient() {
   const [inputId, setInputId] = useState('');
