@@ -21,6 +21,7 @@ interface IFormInput {
   contactEmail: string;
 }
 
+
 interface ISearchFormInput {
   searchQuery: string;
 }
