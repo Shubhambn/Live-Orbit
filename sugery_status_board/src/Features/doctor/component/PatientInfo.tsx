@@ -1,6 +1,6 @@
 'use client';
 
-import { usePatientStore } from '@/Features/doctor/types/patientStore';
+import { usePatientStore } from '@/store/patientStore';
 import { MapPin, Phone, Mail, User } from 'lucide-react';
 
 const statusStyles: Record<string, string> = {
@@ -41,22 +41,22 @@ export default function PatientDetailsCard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
         <div className="flex items-center gap-2">
           <User className="w-4 h-4 text-gray-500" />
-          <span className="font-medium">Name:</span> {selectedPatient.name}
+          <span className="font-medium">Name:</span> {selectedPatient.firstName} {selectedPatient.lastName}
         </div>
 
         <div className="flex items-center gap-2">
           <Mail className="w-4 h-4 text-gray-500" />
-          <span className="font-medium">Email:</span> {selectedPatient.email}
+          <span className="font-medium">Email:</span> {selectedPatient.contactEmail}
         </div>
 
         <div className="flex items-center gap-2">
           <Phone className="w-4 h-4 text-gray-500" />
-          <span className="font-medium">Phone:</span> {selectedPatient.phone}
+          <span className="font-medium">Phone:</span> {selectedPatient.phoneNumber}
         </div>
 
         <div className="flex items-center gap-2">
           <MapPin className="w-4 h-4 text-gray-500" />
-          <span className="font-medium">Address:</span> {selectedPatient.address}
+          <span className="font-medium">Address:</span> {selectedPatient.streetAddress}, {selectedPatient.city}, {selectedPatient.state}, {selectedPatient.country}
         </div>
       </div>
 

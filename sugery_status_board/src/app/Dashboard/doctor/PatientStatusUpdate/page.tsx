@@ -1,8 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
-import { usePatientStore } from '@/Features/doctor/types/patientStore';
-import patients from '@/Features/doctor/data/PatientsData.json';
+import { usePatientStore } from '@/store/patientStore';
 
 
 import SearchPatient from '@/Features/doctor/component/SearchPatient';
@@ -11,11 +9,7 @@ import StatusUpdateForm from '@/Features/doctor/component/StatusUpdate';
 import StatusWorkflow from '@/Features/doctor/component/StatusWorkflo';
 
 export default function PatientStatusUpdatePage() {
-  const { selectedPatient, setPatients } = usePatientStore();
-
-  useEffect(() => {
-    setPatients(patients);
-  }, [setPatients]);
+  const { selectedPatient } = usePatientStore();
 
   return (
     <main className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
@@ -31,7 +25,7 @@ export default function PatientStatusUpdatePage() {
         <SearchPatient />
 
         {/* Conditional Display */}
-        {selectedPatient?.id ? (
+        {selectedPatient?.patientNumber ? (
           <section className="bg-white rounded-2xl shadow-md p-6 space-y-6 transition-all duration-200">
             <PatientInfo />
             <hr className="border-gray-200" />

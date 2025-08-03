@@ -5,7 +5,7 @@ export const navConfig = {
   ],
   admin: [
     { label: "Home", path: "/" },
-    { label: "Patient Information", path: "/admin/patients" },
+    { label: "Patient Information", path: "/Dashboard/admin" },
     { label: "Status Update", path: "/Dashboard/doctor/PatientStatusUpdate" },
     { label: "Status Board", path: "/surgeon/statusboard" },
   ],

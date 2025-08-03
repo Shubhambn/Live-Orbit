@@ -1,10 +1,9 @@
-import React from 'react'
+import React from "react";
 
-export default function DoctorLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="bg-gray-50 min-h-screen">
-      {/* You can add a Sidebar or Topbar here */}
-      {children}
-    </div>
-  )
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <>{children}</>;
 }
