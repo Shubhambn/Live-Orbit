@@ -16,7 +16,7 @@ export default function Footer() {
     <footer className="w-full bg-accentSub brightness-75 shadow  text-gray-800 px-4 py-4 text-sm md:text-base flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
       {/* GitHub Link */}
       <Link
-        href="https://github.com/chingu-voyages/V56-tier2-team-23"
+        href="/"
         className="flex items-center space-x-2 hover:underline transition"
       >
         <FiGithub className="text-lg" />

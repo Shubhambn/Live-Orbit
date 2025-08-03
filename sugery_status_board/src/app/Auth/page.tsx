@@ -1,26 +1,9 @@
-"use client";
 import Link from "next/link";
 import { MdOutlineMonitorHeart } from "react-icons/md";
 import { LuLogIn } from "react-icons/lu";
-import { handleLogin } from "@/Features/auth/utils/authHandler";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 // auth module
 export default function AuthModule() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const router = useRouter();
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const success = handleLogin(email, password);
-    if (success) {
-      router.push("/"); // 🔁 redirect after successful login
-    } else {
-      setError("Invalid email or password");
-    }
-  };
   return (
     <article className="sm:w-[60%] md:w-[40%] w-[80%] mx-auto flex flex-col justify-center p-4 shadow m-2 items-center">
       <h1 className="font-bold font-header text-lg text-center">
@@ -30,15 +13,13 @@ export default function AuthModule() {
         Login to access surgery data or continue as visitor to access status
         board
       </h2>
-      <form className="grid grid-cols-1 gap-y-2 " onSubmit={handleSubmit}>
+      <form className="grid grid-cols-1 gap-y-2 " action="">
         <div>
           <label htmlFor="user-email">
             <span className="text-red-600">*</span>Email:
           </label>
           <input
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             id="email"
             type="email"
             className="w-[100%] p-2 border rounded border-gray-300 outline-accentSub"
@@ -51,8 +32,6 @@ export default function AuthModule() {
           </label>
           <input
             required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
             type="password"
             className="w-[100%] p-2 rounded border border-gray-300 outline-accentSub"
             placeholder="*****"
@@ -66,9 +45,8 @@ export default function AuthModule() {
           <p>Sign In</p>
           <LuLogIn />
         </button>
-        <p className="text-sm text-center text-red-400"> {error}</p>
 
-        {/* <button className="px-1.5 ">Show dummy credentials</button> */}
+        <p className="underline text-left">Show dummy credentials</p>
       </form>
 
       <hr className="w-[90%] mx-[5%] text-gray-500 mt-6 mb-4 " />
