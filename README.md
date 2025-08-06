@@ -1,41 +1,97 @@
-# voyage-tasks
+# 🏥 Surgery Status Board — MVP
 
-Your project's `readme` is as important to success as your code. For 
-this reason you should put as much care into its creation and maintenance
-as you would any other component of the application.
+_A React/next.js‑based dashboard for tracking surgical patient information and progress._
 
-If you are unsure of what should go into the `readme` let this article,
-written by an experienced Chingu, be your starting point - 
-[Keys to a well written README](https://tinyurl.com/yk3wubft).
+---
 
-And before we go there's "one more thing"! Once you decide what to include
-in your `readme` feel free to replace the text we've provided here.
+## 🚀 Overview
 
-> Own it & Make it your Own!
+Surgery Status Board is a frontend-only application built with **React**, **Zustand**, and **Next.js**, aimed at medical facilities managing surgical patients. It supports:
 
-## Team Documents
+- ✅ Admin and Doctor access control
+- ✅ Patient creation and management
+- ✅ Real‑time search and lookup
+- ✅ Live status updates and workflow charts
+- ✅ Exportable summaries (planned in next sprint)
+- ✅ Fully client‑side with Zustand as the source of truth
 
-You may find these helpful as you work together to organize your project.
+> 🎯 **Note:** User Story 7 (multi‑patient export by date/month/year) is pending implementation in the next MVP iteration.
 
-- [Team Project Ideas](./docs/team_project_ideas.md)
-- [Team Decision Log](./docs/team_decision_log.md)
+---
 
-Meeting Agenda templates (located in the `/docs` directory in this repo):
+## 🧱 Tech Stack
 
-- Meeting - Voyage Kickoff --> ./docs/meeting-voyage_kickoff.docx
-- Meeting - App Vision & Feature Planning --> ./docs/meeting-vision_and_feature_planning.docx
-- Meeting - Sprint Retrospective, Review, and Planning --> ./docs/meeting-sprint_retrospective_review_and_planning.docx
-- Meeting - Sprint Open Topic Session --> ./docs/meeting-sprint_open_topic_session.docx
+| Feature                  | Technology Stack                    |
+|--------------------------|-------------------------------------|
+| **Frontend Framework**   | Next.js (React)                     |
+| **State Management**     | Zustand                             |
+| **Routing**              | Next.js `useRouter`, client‑only auth|
+| **Icons**                | `react-icons`                       |
+| **Forms & Validation**   | `react-hook-form`                   |
+| **UI Utility**           | Tailwind CSS                        |
+| **Date Parsing**         | `date-fns` (prepping for exports)  |
 
-## Our Team
+---
+
+## 🎯 User Flows & Features
+
+### 1. Authentication Guard  
+- All protected pages are wrapped in `<ProtectedRoute>` to ensure only authenticated users see them.
+- Based on admin or doctor roles to control access.
+
+### 2. Add New Patient  
+- Admins can add patient information via a form.
+- Data is stored in Zustand and surfaces immediately.
+
+### 3. Patient Search (Live)  
+- Real-time searching of patients by last name using debounced input.
+- Works responsive for both desktop and mobile screens.
+
+### 4. Patient Status Workflow  
+- Doctors can locate a patient and submit status updates.
+- UI displays workflow of current statuses, and shows relevant forms.
+
+---
 
 
+---
 
-- Ahamada Shamuran #1: [GitHub](https://github.com/Ahmad-nba) / [LinkedIn](www.linkedin.com/in/ahamada-mubiru-shamuran)
-- Tibam Gisele: ](https://github.com/Gisele-1) / [LinkedIn]www.linkedin.com/in/tibam-gisele-684781129
-- Teammate name #2: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
-- Teammate name #n: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
-- Tibamwenda Anthony #5: [GitHub](https://github.com/AskTiba) / [LinkedIn](https://www.linkedin.com/in/tibamwenda-anthony-64144820b/)
-- Teammate name #n: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
--  Teammate name #n: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
-- Shubham Nagare: [GitHub](https://github.com/Shubhambn)
+## ⚙️ Installation & Setup
+
+```bash
+git clone <repo-url>
+cd surgery-status-board
+npm install
+npm run dev
+
+---
+
+## 📌 Next Steps & Roadmap
+User Story 7: Export patient data by date/month/year (PDF, Excel, Word)
+
+Add role-based dashboard (e.g. admin vs doctor views)
+
+Improve styling and responsiveness (mobile-first)
+
+Add notification/toast system for feedback
+
+Add unit tests and type-check coverage
+
+🧪 MVP Status Summary
+Feature	Status
+Auth guard with client-side auth checks	✅ Done
+Add patient form and validation	✅ Done
+Search patient live by last name	✅ Done
+Doctor status update workflow	✅ Done
+Export feature (multi‑patient + filters)	❌ Coming Up
+
+🤝 Contribute
+Contributions are welcome! Please submit a PR or open issues for improvements or bug fixes.
+
+Thank you for using the Surgery Status Board MVP! Let’s build the next features together. 💪
+
+yaml
+Copy
+Edit
+
+
