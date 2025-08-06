@@ -74,7 +74,8 @@ export const usePatientStore = create<PatientState>()(
       addPatient: (patient) => {
         const { patients } = get();
         const emailExists = patients.some(
-          (p) => p.contactEmail.toLowerCase() === patient.contactEmail.toLowerCase()
+          (p) =>
+            p.contactEmail.toLowerCase() === patient.contactEmail.toLowerCase()
         );
 
         if (emailExists) {
@@ -97,9 +98,11 @@ export const usePatientStore = create<PatientState>()(
           message: `Successfully added patient ${newPatient.patientNumber}!`,
         };
       },
-      updatePatientStatus: (patientNumber, newStatus) => {
-        const { patients } = get();
-        const patientIndex = patients.findIndex((p) => p.patientNumber === patientNumber);
+      updatePatientStatus: (patientNumber, newStatus, forceSkip = false) => {
+        const { patients, selectedPatient } = get();
+        const patientIndex = patients.findIndex(
+          (p) => p.patientNumber === patientNumber
+        );
 
         if (patientIndex === -1) {
           return { success: false, message: "Patient not found." };
@@ -113,7 +116,7 @@ export const usePatientStore = create<PatientState>()(
           return { success: false, message: "Invalid status." };
         }
 
-        // Allow moving one step back or any number of steps forward
+        // Prevent skipping backward more than one step
         if (
           newStatusIndex < currentStatusIndex &&
           newStatusIndex !== currentStatusIndex - 1
@@ -124,9 +127,28 @@ export const usePatientStore = create<PatientState>()(
           };
         }
 
+        // Prevent skipping forward more than one step unless forced
+        if (newStatusIndex > currentStatusIndex + 1 && forceSkip === false) {
+          return {
+            success: false,
+            requiresConfirmation: true,
+            message: "You're skipping ahead more than one step. Are you sure?",
+          };
+        }
+
+        const updatedPatient = { ...patient, status: newStatus };
         const updatedPatients = [...patients];
-        updatedPatients[patientIndex] = { ...patient, status: newStatus };
-        set({ patients: updatedPatients });
+        updatedPatients[patientIndex] = updatedPatient;
+
+        const updatedSelectedPatient =
+          selectedPatient?.patientNumber === patientNumber
+            ? updatedPatient
+            : selectedPatient;
+
+        set({
+          patients: updatedPatients,
+          selectedPatient: updatedSelectedPatient,
+        });
 
         return { success: true, message: "Patient status updated." };
       },
