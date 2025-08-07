@@ -20,7 +20,7 @@ const statusDescriptions: Record<string, string> = {
   'Closing':'Surgery completed',
   'Recovery':'Patient transferred to post-surgery recovery room',
   'Complete':'Recovery completed Patient awaiting dismissal',
-  'Dismissal': 'Tranderred to hospital room or patient has left',
+  'Dismissal': 'Transferred to hospital room or patient has left',
 }
 
 export default function PatientDetailsCard() {

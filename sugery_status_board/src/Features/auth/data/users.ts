@@ -1,3 +1,14 @@
+type User = {
+  id: string;
+  email: string;
+  password: string;
+  role: string;
+  name: {
+    firstname: string;
+    lastname: string;
+  };
+};
+
 export const dummyUsers: User[] = [
   {
     id: "u1",

@@ -18,12 +18,12 @@ export default function StatusWorkflowReference() {
         Complete surgical workflow from admission to discharge
       </p>
 
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 space-y-4 sm:space-y-0">
         {workflowSteps.map((step, idx) => (
-          <div key={step} className="flex items-center gap-3">
+          <div key={step} className="flex items-center sm:gap-3">
             <span
               className={`
-                px-4 py-1 text-sm rounded-full border transition 
+                px-4 py-1 text-sm rounded-full border transition whitespace-nowrap
                 ${idx === 0 
                   ? 'bg-blue-50 text-blue-600 border-blue-300 font-semibold' 
                   : 'bg-white text-gray-800 border-gray-300'
@@ -34,7 +34,10 @@ export default function StatusWorkflowReference() {
             </span>
 
             {idx < workflowSteps.length - 1 && (
-              <span className="text-gray-400 text-xl font-light">→</span>
+              <span className="text-gray-400 text-xl font-light mx-2 sm:mx-1">
+                <span className="sm:hidden">↓</span>
+                <span className="hidden sm:inline">→</span>
+              </span>
             )}
           </div>
         ))}

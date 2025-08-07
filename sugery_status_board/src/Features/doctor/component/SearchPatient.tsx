@@ -42,7 +42,7 @@ export default function SearchPatient() {
         <div className="flex gap-2">
           <button
             onClick={handleSearch}
-            className="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            className="px-4 py-2 text-sm font-medium bg-accentMain text-white rounded-lg hover:bg-accentSub transition"
           >
             Look Up
           </button>
