@@ -1,47 +1,60 @@
-'use client';
+"use client";
 
-import { usePatientStore } from '@/Features/doctor/types/patientStore';
+import { usePatientStore, Status } from "@/store/patientStore";
 
 const workflowSteps = [
-  'Checked In',
-  'Pre-Procedure',
-  'In Progress',
-  'Closing',
-  'Recovery',
-  'Complete',
-  'Dismissal',
+  "Checked In",
+  "Pre-Procedure",
+  "In Progress",
+  "Closing",
+  "Recovery",
+  "Complete",
+  "Dismissal",
 ];
 
 export default function StatusUpdateForm() {
   const selectedPatient = usePatientStore((s) => s.selectedPatient);
   const updatePatientStatus = usePatientStore((s) => s.updatePatientStatus);
 
-  const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value;
+
     if (!selectedPatient || newStatus === selectedPatient.status) return;
 
-    updatePatientStatus(selectedPatient.id, newStatus);
+    // Safety check: ensure newStatus is a valid Status
+    if (!workflowSteps.includes(newStatus)) return;
 
-    try {
-      const res = await fetch('/api/doctor/UpdatePatient', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: selectedPatient.id, status: newStatus }),
-      });
+    const newStatusTyped = newStatus as Status;
 
-      if (!res.ok) throw new Error('Failed to update status');
-      console.log('Status updated on server');
-    } catch (error) {
-      console.log('Server update failed:', error);
-      alert('Could not save to server. Please try again later.');
+    const currentIndex = workflowSteps.indexOf(selectedPatient.status);
+    const newIndex = workflowSteps.indexOf(newStatusTyped);
+
+    if (currentIndex === newIndex) return;
+
+    if (newIndex < currentIndex && newIndex !== currentIndex - 1) {
+      alert("You cannot move status back more than one step.");
+      return;
     }
+
+    if (newIndex > currentIndex + 1) {
+      const confirmSkip = window.confirm(
+        `You're about to skip ${
+          newIndex - currentIndex
+        } steps ahead. Are you sure?`
+      );
+      if (!confirmSkip) return;
+    }
+
+    updatePatientStatus(selectedPatient.patientNumber, newStatusTyped);
   };
 
   if (!selectedPatient) return null;
 
   return (
     <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 max-w-2xl mx-auto mt-4 space-y-4">
-      <h2 className="text-lg font-semibold text-gray-800">Update Surgery Status</h2>
+      <h2 className="text-lg font-semibold text-gray-800">
+        Update Surgery Status
+      </h2>
       <label htmlFor="status" className="text-sm text-gray-600">
         Select new status
       </label>

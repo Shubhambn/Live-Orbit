@@ -1,10 +1,7 @@
-import { ReactHTMLElement, ReactNode } from "react";
-
 export default function HomeCard({
   Icon,
   header,
   desc,
-  
 }: {
   Icon: React.ComponentType<{ className?: string }>;
   header: string;

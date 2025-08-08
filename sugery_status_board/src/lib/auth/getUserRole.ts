@@ -1,1 +1,0 @@
-// get the user role from the request

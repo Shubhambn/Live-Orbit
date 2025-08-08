@@ -34,7 +34,7 @@ export default function Navbar() {
     <>
       <nav className="w-full py-4 px-4 shadow-md bg-white flex justify-between items-center relative z-30">
         {/* Logo and Title */}
-        <Link href="/" className="flex  space-x-3">
+        <Link href="/" className="flex space-x-3">
           <section>
             <Image
               src="/assets/logo.svg"

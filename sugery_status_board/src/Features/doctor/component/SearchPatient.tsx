@@ -1,17 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { usePatientStore } from '@/Features/doctor/types/patientStore';
+import { usePatientStore } from '@/store/patientStore';
 
 export default function SearchPatient() {
   const [inputId, setInputId] = useState('');
-  const findPatientById = usePatientStore((s) => s.findPatientById);
+  const findPatientByPatientNumber = usePatientStore((s) => s.findPatientByPatientNumber);
+  const selectedPatient = usePatientStore((s) => s.selectedPatient);
   const clearSelectedPatient = usePatientStore((s) => s.clearSelectedPatient);
 
   const handleSearch = () => {
     const trimmedId = inputId.trim();
     if (trimmedId.length === 6) {
-      findPatientById(trimmedId);
+      findPatientByPatientNumber(trimmedId);
     } else {
       alert('Please enter a valid 6-character Patient ID.');
     }
@@ -41,7 +42,7 @@ export default function SearchPatient() {
         <div className="flex gap-2">
           <button
             onClick={handleSearch}
-            className="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            className="px-4 py-2 text-sm font-medium bg-accentMain text-white rounded-lg hover:bg-accentSub transition"
           >
             Look Up
           </button>
@@ -53,6 +54,18 @@ export default function SearchPatient() {
           </button>
         </div>
       </div>
+
+      {selectedPatient && (
+        <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <h3 className="text-md font-semibold text-gray-800 mb-2">Patient Information</h3>
+          <p className="text-sm text-gray-700"><strong>Name:</strong> {selectedPatient.firstName} {selectedPatient.lastName}</p>
+          <p className="text-sm text-gray-700"><strong>Patient ID:</strong> {selectedPatient.patientNumber}</p>
+          <p className="text-sm text-gray-700"><strong>Address:</strong> {selectedPatient.streetAddress}, {selectedPatient.city}, {selectedPatient.state}, {selectedPatient.country}</p>
+          <p className="text-sm text-gray-700"><strong>Phone:</strong> {selectedPatient.phoneNumber}</p>
+          <p className="text-sm text-gray-700"><strong>Email:</strong> {selectedPatient.contactEmail}</p>
+          <p className="text-sm text-gray-700"><strong>Current Status:</strong> {selectedPatient.status}</p>
+        </div>
+      )}
     </div>
   );
 }
