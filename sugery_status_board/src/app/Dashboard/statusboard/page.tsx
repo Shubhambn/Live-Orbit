@@ -1,4 +1,5 @@
 "use client";
+import { useEffect } from "react";
 import { MdMonitor } from "react-icons/md";
 import { LuUsers } from "react-icons/lu";
 import { usePatientStore } from "@/store/patientStore";
@@ -7,6 +8,11 @@ import ActivePatientCard from "@/Features/statusBoard/components/activePatientCa
 
 export default function StatusBoardPage() {
   const patients = usePatientStore((state) => state.patients);
+  const fetchPatients = usePatientStore((state) => state.fetchPatients);
+
+  useEffect(() => {
+    fetchPatients();
+  }, [fetchPatients]);
 
   return (
     <main className="p-4 space-y-6">
