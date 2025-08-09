@@ -16,7 +16,7 @@ export default function StatusUpdateForm() {
   const selectedPatient = usePatientStore((s) => s.selectedPatient);
   const updatePatientStatus = usePatientStore((s) => s.updatePatientStatus);
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value;
 
     if (!selectedPatient || newStatus === selectedPatient.status) return;
@@ -45,7 +45,7 @@ export default function StatusUpdateForm() {
       if (!confirmSkip) return;
     }
 
-    updatePatientStatus(selectedPatient.patientNumber, newStatusTyped);
+    await updatePatientStatus(selectedPatient.patientNumber, newStatusTyped);
   };
 
   if (!selectedPatient) return null;

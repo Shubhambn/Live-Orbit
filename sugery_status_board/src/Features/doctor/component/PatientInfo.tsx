@@ -2,16 +2,7 @@
 
 import { usePatientStore } from '@/store/patientStore';
 import { MapPin, Phone, Mail, User } from 'lucide-react';
-
-const statusStyles: Record<string, string> = {
-  'Checked In': 'bg-blue-500 text-white',
-  'Pre-Procedure': 'bg-yellow-500 text-white',
-  'In Progress':'bg-orange-500 text white',
-  'Closing':'bg-violet-500 text white',
-  'Recovery':'bg-sky-500 text white',
-  'Complete':'bg-green-500 text white',
-  'Dismissal': 'bg-gray-500 text-white',
-};
+import { statusColors } from "@/utils/statusColors";
 
 const statusDescriptions: Record<string, string> = {
   'Checked In': 'In the facility awaiting their procedure',
@@ -28,8 +19,7 @@ export default function PatientDetailsCard() {
 
   if (!selectedPatient) return null;
 
-  const badgeClass =
-    statusStyles[selectedPatient.status] || 'bg-slate-400 text-white';
+  const badgeClass = statusColors[selectedPatient.status] || 'bg-slate-400 text-white';
 
   const description =
     statusDescriptions[selectedPatient.status] || 'Status unknown';

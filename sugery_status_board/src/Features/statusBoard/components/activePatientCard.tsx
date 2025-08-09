@@ -1,4 +1,5 @@
 import { usePatientStore } from "@/store/patientStore";
+import { statusColors } from "@/utils/statusColors";
 
 export default function ActivePatientCard() {
   const patients = usePatientStore((state) => state.patients);
@@ -16,7 +17,8 @@ export default function ActivePatientCard() {
           <p className="text-gray-600 text-sm sm:text-base text-center">
             {patient.lastName} {patient.firstName}
           </p>
-          <div className="mt-2 rounded-xl bg-accentMain text-white px-3 py-1 text-xs sm:text-sm">
+          <div
+            className={`mt-2 rounded-xl px-3 py-1 text-xs sm:text-sm ${statusColors[patient.status]}`}>
             {patient.status}
           </div>
         </article>

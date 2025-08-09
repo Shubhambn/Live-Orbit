@@ -1,18 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePatientStore } from '@/store/patientStore';
+import { statusColors } from "@/utils/statusColors";
 
 export default function SearchPatient() {
   const [inputId, setInputId] = useState('');
-  const findPatientByPatientNumber = usePatientStore((s) => s.findPatientByPatientNumber);
+  const findPatientByPatientNumber = usePatientStore(
+    (s) => s.findPatientByPatientNumber
+  );
   const selectedPatient = usePatientStore((s) => s.selectedPatient);
   const clearSelectedPatient = usePatientStore((s) => s.clearSelectedPatient);
+  const fetchPatients = usePatientStore((s) => s.fetchPatients);
 
-  const handleSearch = () => {
+  useEffect(() => {
+    fetchPatients();
+  }, [fetchPatients]);
+
+  const handleSearch = async () => {
     const trimmedId = inputId.trim();
     if (trimmedId.length === 6) {
-      findPatientByPatientNumber(trimmedId);
+      await findPatientByPatientNumber(trimmedId);
     } else {
       alert('Please enter a valid 6-character Patient ID.');
     }
@@ -63,7 +71,9 @@ export default function SearchPatient() {
           <p className="text-sm text-gray-700"><strong>Address:</strong> {selectedPatient.streetAddress}, {selectedPatient.city}, {selectedPatient.state}, {selectedPatient.country}</p>
           <p className="text-sm text-gray-700"><strong>Phone:</strong> {selectedPatient.phoneNumber}</p>
           <p className="text-sm text-gray-700"><strong>Email:</strong> {selectedPatient.contactEmail}</p>
-          <p className="text-sm text-gray-700"><strong>Current Status:</strong> {selectedPatient.status}</p>
+          <p className={`text-sm font-medium px-3 py-1 rounded-full ${statusColors[selectedPatient.status]}`}>
+            <strong>Current Status:</strong> {selectedPatient.status}
+          </p>
         </div>
       )}
     </div>

@@ -42,8 +42,14 @@ function PatientInformation() {
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    const result = addPatient(data);
+  const fetchPatients = usePatientStore((state) => state.fetchPatients);
+
+  useEffect(() => {
+    fetchPatients();
+  }, [fetchPatients]);
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    const result = await addPatient(data);
     if (result.success) {
       setFormMessage({ type: "success", text: result.message });
       reset();
