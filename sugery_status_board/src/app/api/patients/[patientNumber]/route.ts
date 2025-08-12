@@ -2,11 +2,13 @@ import { connectDB } from "@/lib/mongodb";
 import { Patient } from "@/models/patient";
 import { NextResponse } from "next/server";
 
-
-export async function GET(_: Request, context: { params: Promise<{ patientNumber: string }> }) {
+export async function GET(
+  _: Request,
+  context: { params: Promise<{ patientNumber: string }> }
+) {
   await connectDB();
 
-  const { patientNumber } = await context.params; 
+  const { patientNumber } = await context.params;
 
   const patient = await Patient.findOne({ patientNumber });
 
@@ -47,6 +49,34 @@ export async function PUT(
     return NextResponse.json(patient, { status: 200 });
   } catch (error: unknown) {
     console.error("PUT /patients error:", error);
+    const message = "Internal server error";
+    if (error instanceof Error) {
+    }
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
+
+export async function DELETE(
+  req: Request,
+  context: { params: Promise<{ patientNumber: string }> }
+) {
+  try {
+    await connectDB();
+
+    const { patientNumber } = await context.params;
+
+    const deletedPatient = await Patient.findOneAndDelete({ patientNumber });
+
+    if (!deletedPatient) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { message: "Patient deleted successfully", patient: deletedPatient },
+      { status: 200 }
+    );
+  } catch (error: unknown) {
+    console.error("DELETE /patients error:", error);
     let message = "Internal server error";
     if (error instanceof Error) {
       message = error.message;
@@ -54,21 +84,3 @@ export async function PUT(
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-
-
-// export async function DELETE(_: Request, { params }: { params: { patientNumber: string } }) {
-//   try {
-//     await connectDB();
-//     const { patientNumber} = params;
-
-//     const deleted = await Patient.findOneAndDelete({ patientNumber});
-
-//     if (!deleted) {
-//       return NextResponse.json({ error: "Not found" }, { status: 404 });
-//     }
-
-//     return NextResponse.json({ message: "Patient deleted" });
-//   } catch (error: any) {
-//     return NextResponse.json({ error: error.message }, { status: 500 });
-//   }
-// }

@@ -1,41 +1,41 @@
 "use client";
 
 import { useState } from "react";
-import { IPatients } from "@/types/patientStore";
-import PatientDetailsCard from "./PatientInfo";
-import StatusUpdateForm from "./StatusUpdate";
+import { usePatientStore } from "@/store/patientStore";
 
 export default function SearchPatient() {
   const [inputId, setInputId] = useState("");
-  const [selectedPatient, setSelectedPatient] = useState<IPatients | null>(null);
+  const [searching, setSearching] = useState(false);
+
+  const findPatientByPatientNumber = usePatientStore(
+    (state) => state.findPatientByPatientNumber
+  );
+  const clearSelectedPatient = usePatientStore(
+    (state) => state.clearSelectedPatient
+  );
 
   const handleSearch = async () => {
-    const trimmedId = inputId.trim();
-    if (trimmedId.length === 6) {
-      try {
-        const res = await fetch(`/api/patients/${trimmedId}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
+    const trimmedId = inputId.trim().toUpperCase();
 
-        if (!res.ok) {
-          alert("Patient not found");
-          return;
-        }
+    if (!/^[A-Z0-9]{6}$/.test(trimmedId)) {
+      alert("Please enter a valid 6-character Patient ID (letters & numbers only).");
+      return;
+    }
 
-        const data: IPatients = await res.json();
-        setSelectedPatient(data);
-      } catch (err) {
-        console.error("Error fetching patient:", err);
-      }
-    } else {
-      alert("Please enter a valid 6-character Patient ID.");
+    try {
+      setSearching(true);
+      await findPatientByPatientNumber(trimmedId);
+    } catch (err) {
+      console.error("Error finding patient:", err);
+      alert("Unable to find patient. Please try again.");
+    } finally {
+      setSearching(false);
     }
   };
 
   const handleClear = () => {
     setInputId("");
-    setSelectedPatient(null);
+    clearSelectedPatient();
   };
 
   return (
@@ -58,9 +58,14 @@ export default function SearchPatient() {
         <div className="flex gap-2">
           <button
             onClick={handleSearch}
-            className="px-4 py-2 text-sm font-medium bg-accentMain text-white rounded-lg hover:bg-accentSub transition"
+            disabled={searching}
+            className={`px-4 py-2 text-sm font-medium text-white rounded-lg transition ${
+              searching
+                ? "bg-accentSub opacity-70 cursor-not-allowed"
+                : "bg-accentMain hover:bg-accentSub"
+            }`}
           >
-            Look Up
+            {searching ? "Searching..." : "Look Up"}
           </button>
           <button
             onClick={handleClear}
@@ -70,14 +75,6 @@ export default function SearchPatient() {
           </button>
         </div>
       </div>
-
-      {/* Patient Details + Status Update */}
-      {selectedPatient && (
-        <div className="mt-6 space-y-6">
-          <PatientDetailsCard patientNumber={selectedPatient.patientNumber} /> 
-          <StatusUpdateForm patientNumber={selectedPatient.patientNumber} />
-        </div>
-      )}
     </div>
   );
 }

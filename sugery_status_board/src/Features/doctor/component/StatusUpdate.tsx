@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Status, IPatients } from "@/types/patientStore";
+import { useState } from "react";
+import { Status } from "@/types/patientStore";
+import { usePatientStore } from "@/store/patientStore";
 
 const workflowSteps: Status[] = [
   "Checked In",
@@ -14,79 +15,37 @@ const workflowSteps: Status[] = [
 ];
 
 export default function StatusUpdateForm({ patientNumber }: { patientNumber: string }) {
-  const [patient, setPatient] = useState<IPatients | null>(null);
-  const [loading, setLoading] = useState(true);
+  const patient = usePatientStore((state) => state.selectedPatient);
+  const updatePatientStatus = usePatientStore((state) => state.updatePatientStatus);
+
   const [updating, setUpdating] = useState(false);
 
-  useEffect(() => {
-    let mounted = true;
-    const fetchPatient = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/patients/${patientNumber}`);
-        if (!res.ok) throw new Error("Failed to fetch patient");
-        const data: IPatients = await res.json();
-        if (mounted) setPatient(data);
-      } catch (err) {
-        console.error(err);
-        if (mounted) setPatient(null);
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    };
-
-    fetchPatient();
-    return () => {
-      mounted = false;
-    };
-  }, [patientNumber]);
+  if (!patient) return <div>Patient not found.</div>;
 
   const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (!patient) return;
-
     const newStatus = e.target.value as Status;
+
     if (newStatus === patient.status) return;
 
     const currentIndex = workflowSteps.indexOf(patient.status);
     const newIndex = workflowSteps.indexOf(newStatus);
+
     if (newIndex > currentIndex + 1) {
       const skipCount = newIndex - currentIndex - 1;
       const proceed = window.confirm(
-        `You're moving from "${patient.status}" to "${newStatus}" skipping ${skipCount} step${skipCount > 1 ? "s" : ""}. Do you want to continue?`
+        `You're moving from "${patient.status}" to "${newStatus}" skipping ${skipCount} step${skipCount > 1 ? "s" : ""}. Continue?`
       );
-      if (!proceed) {
-        return;
-      }
+      if (!proceed) return;
     }
-
 
     setUpdating(true);
-    try {
-      const res = await fetch(`/api/patients/${patientNumber}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
-      });
+    const result = await updatePatientStatus(patientNumber, newStatus);
+    setUpdating(false);
 
-      if (!res.ok) {
-        const errBody = await res.json().catch(() => ({}));
-        const msg = (errBody && (errBody.error || errBody.message)) || res.statusText;
-        alert(`Error updating status: ${msg}`);
-        return;
-      }
-
-      const updatedPatient: IPatients = await res.json();
-      setPatient(updatedPatient);
-    } catch (error) {
-      console.error("Failed to update patient status", error);
-      alert("Failed to update patient status. Please try again.");
-    } finally {
-      setUpdating(false);
+    if (!result.success) {
+      alert(`Error updating status: ${result.message}`);
     }
   };
-
-  if (loading) return <div>Loading patient data...</div>;
-  if (!patient) return <div>Patient not found.</div>;
 
   return (
     <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 max-w-2xl mx-auto mt-4 space-y-4">

@@ -1,103 +1,158 @@
 import { create } from "zustand";
-
-import { Status,IPatients } from "@/types/patientStore";
-
+import { Status, IPatients } from "@/types/patientStore";
 
 interface PatientState {
   patients: IPatients[];
-  selectedPatient: IPatients| null;
+  selectedPatient: IPatients | null;
   fetchPatients: () => Promise<void>;
   setPatients: (patients: IPatients[]) => void;
   setSelectedPatient: (patient: IPatients | null) => void;
-  addPatient: (patient: Omit<IPatients, "_id" | "patientNumber" | "status">) => Promise<{ success: boolean; message: string }>;
-  updatePatientStatus: (patientNumber: string, newStatus: Status) => Promise<{ success: boolean; message: string }>;
+  addPatient: (
+    patient: Omit<IPatients, "patientNumber" | "status">
+  ) => Promise<{ success: boolean; message: string }>;
+  updatePatientStatus: (
+    patientNumber: string,
+    newStatus: Status
+  ) => Promise<{ success: boolean; message: string }>;
+  deletePatient: (
+    patientNumber: string
+  ) => Promise<{ success: boolean; message: string }>;
   findPatientByPatientNumber: (patientNumber: string) => Promise<void>;
   clearSelectedPatient: () => void;
 }
 
-
-export const usePatientStore = create<PatientState>()((set, get) => ({
-  patients: [],
-  selectedPatient: null,
-
-  fetchPatients: async () => {
+export const usePatientStore = create<PatientState>((set, get) => {
+  const apiCall = async <T>(
+    url: string,
+    options?: RequestInit
+  ): Promise<{ success: boolean; data?: T; message?: string }> => {
     try {
-      const response = await fetch("/api/patients");
-      if (!response.ok) throw new Error("Failed to fetch patients");
-      const patients = await response.json();
-      set({ patients });
-    } catch (err) {
-      console.error("Error fetching patients:", err);
-    }
-  },
-
-  setPatients: (patients) => set({ patients }),
-
-  setSelectedPatient: (patient) => set({ selectedPatient: patient }),
-
-  findPatientByPatientNumber: async (patientNumber) => {
-    try {
-      const response = await fetch(`/api/patients/by-number/${patientNumber}`);
-      if (!response.ok) throw new Error("Patient not found");
-      const patient = await response.json();
-      set({ selectedPatient: patient });
-    } catch {
-      set({ selectedPatient: null });
-    }
-  },
-
-  clearSelectedPatient: () => set({ selectedPatient: null }),
-
-  addPatient: async (patient) => {
-    try {
-      const response = await fetch("/api/patients", {
-        method: "POST",
+      const res = await fetch(url, {
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(patient),
+        ...options,
       });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Request failed");
+      return { success: true, data };
+    } catch (error: unknown) {
+  console.error("API Error:", error);
 
-      const result = await response.json();
+  let message = "An unexpected error occurred";
+  if (error instanceof Error) {
+    message = error.message;
+  }
 
-      if (response.ok) {
-        set({ patients: [...get().patients, result] });
-        return { success: true, message: `Successfully added patient ${result.patientNumber}!` };
-      } else {
-        return { success: false, message: result.message || "Failed to add patient." };
+  return { success: false, message };
+}
+
+  };
+
+  return {
+    patients: [],
+    selectedPatient: null,
+
+    //FetchPatients
+
+    fetchPatients: async () => {
+      const { success, data } = await apiCall<IPatients[]>("/api/patients");
+      if (success && data) set({ patients: data });
+    },
+
+    setPatients: (patients) => set({ patients }),
+
+    setSelectedPatient: (patient) => set({ selectedPatient: patient }),
+
+//-----------------------------------------------------
+    //Find_The_Patient_By_Patient_Number
+
+    findPatientByPatientNumber: async (patientNumber) => {
+      const { success, data } = await apiCall<IPatients>(
+        `/api/patients/${patientNumber}`
+      );
+      set({ selectedPatient: success ? data! : null });
+    },
+
+    clearSelectedPatient: () => set({ selectedPatient: null }),
+
+    addPatient: async (patient) => {
+      const { success, data, message } = await apiCall<IPatients>(
+        "/api/patients",
+        {
+          method: "POST",
+          body: JSON.stringify(patient),
+        }
+      );
+
+      if (success && data) {
+        set({ patients: [...get().patients, data] });
+        return {
+          success: true,
+          message: `Successfully added patient ${data.patientNumber}!`,
+        };
       }
-    } catch{
-      return { success: false, message: "Error adding patient." };
-    }
-  },
+      return { success: false, message: message || "Failed to add patient." };
+    },
 
-  updatePatientStatus: async (patientNumber, newStatus) => {
-    try {
-      const response = await fetch(`/api/patients/${patientNumber}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
-      });
+//-------------------------------------------------------------------
 
-      const result = await response.json();
+    //Update_The_Patient_By_Patient_Number
 
-      if (response.ok) {
-        const updatedPatients = get().patients.map((p) =>
+    updatePatientStatus: async (patientNumber, newStatus) => {
+      const prevPatients = get().patients;
+      const prevSelected = get().selectedPatient;
+      set({
+        patients: prevPatients.map((p) =>
           p.patientNumber === patientNumber ? { ...p, status: newStatus } : p
-        );
+        ),
+        selectedPatient:
+          prevSelected?.patientNumber === patientNumber
+            ? { ...prevSelected, status: newStatus }
+            : prevSelected,
+      });
 
-        set({
-          patients: updatedPatients,
-          selectedPatient:
-            get().selectedPatient?.patientNumber === patientNumber
-              ? { ...get().selectedPatient!, status: newStatus }
-              : get().selectedPatient,
-        });
+      const { success, message } = await apiCall(
+        `/api/patients/${patientNumber}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
 
-        return { success: true, message: "Patient status updated." };
-      } else {
-        return { success: false, message: result.message || "Failed to update patient status." };
+      if (!success) {
+        set({ patients: prevPatients, selectedPatient: prevSelected });
+        return { success: false, message: message || "Failed to update status" };
       }
-    } catch{
-      return { success: false, message: "Error updating patient status." };
-    }
-  },
-}));
+
+      return { success: true, message: "Patient status updated." };
+    },
+
+//------------------------------------------------------------------------
+
+    //Delete_Patient_By_Patient_Number
+    
+    deletePatient: async (patientNumber) => {
+      const prevPatients = get().patients;
+      const prevSelected = get().selectedPatient;
+      set({
+        patients: prevPatients.filter(
+          (p) => p.patientNumber !== patientNumber
+        ),
+        selectedPatient:
+          prevSelected?.patientNumber === patientNumber ? null : prevSelected,
+      });
+
+      const { success, message } = await apiCall(
+        `/api/patients/${patientNumber}`,
+        { method: "DELETE" }
+      );
+
+      if (!success) {
+        set({ patients: prevPatients, selectedPatient: prevSelected });
+        return { success: false, message: message || "Failed to delete patient" };
+      }
+
+      return { success: true, message: "Patient deleted successfully." };
+    },
+  };
+});
+// -------------------------------------------
