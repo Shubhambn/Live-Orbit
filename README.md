@@ -29,7 +29,8 @@ Surgery Status Board is a frontend-only application built with **React**, **Zust
 | **Icons**                | `react-icons`                       |
 | **Forms & Validation**   | `react-hook-form`                   |
 | **UI Utility**           | Tailwind CSS                        |
-| **Date Parsing**         | `date-fns` (prepping for exports)  |
+| **Date Parsing**         | `date-fns` (prepping for exports)   |
+| **Database**             | MongoDB                             |
 
 ---
 
@@ -63,6 +64,10 @@ git clone <repo-url>
 cd surgery-status-board
 npm install
 npm run dev
+
+checkout functionality:
+Admin Email : xyz@gmail.com
+Admin Pass : admin123
 
 ---
 
