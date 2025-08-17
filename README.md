@@ -6,7 +6,7 @@ _A React/next.js‑based dashboard for tracking surgical patient information and
 
 ## 🚀 Overview
 
-Surgery Status Board is a frontend-only application built with **React**, **Zustand**, and **Next.js**, aimed at medical facilities managing surgical patients. It supports:
+Surgery Status Board is a frontend-only application built with **React**, **Zustand**, **Next.js** and **MongoDB**, aimed at medical facilities managing surgical patients. It supports:
 
 - ✅ Admin and Doctor access control
 - ✅ Patient creation and management
@@ -56,6 +56,14 @@ Surgery Status Board is a frontend-only application built with **React**, **Zust
 
 
 ---
+
+Our Team:
+-Member Name: Tushar Parihar Role: Product Maneger [GitHub](https://github.com/Tush-R)
+-Member Name: Tibam Gisele Role: Scrum Master  [GitHub](https://github.com/Gisele-1)
+- Member Name: Jyotirmoy Das Role: Scrum Master  [GitHub](https://github.com/jdx-code)
+- Member Name: Ahamada Role: Web Developer [GitHub](https://github.com/Ahmad-nba)
+- Member Name: Shubham Nagare Role:"Web Developer" [GitHub](https://github.com/Shubhambn)
+- Member Name: Tibamwenda Role:"Web Developer" [GitHub](https://github.com/AskTiba)
 
 ## ⚙️ Installation & Setup
 
